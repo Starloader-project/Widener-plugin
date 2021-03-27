@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'java-gradle-plugin'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+group = 'de.geolykt.starloader'
+archivesBaseName = 'widener-plugin'
+def baseVersion = '0.0.1'
+
+repositories {
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    // Access widening technologies
+    implementation ('net.fabricmc:access-widener:1.0.0')
+    implementation ('org.zeroturnaround:zt-zip:1.14')
+}
+
+gradlePlugin {
+    plugins {
+        widenerPlugin {
+            id = project.archivesBaseName
+            version = '0.0.1'
+            implementationClass = 'de.geolykt.starloader.widener.WidenerGradlePlugin'
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        plugin(MavenPublication) { publication ->
+            groupId project.group
+            artifactId project.archivesBaseName
+            version '0.0.1'
+
+            from components['java']
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+
+        // Also publish a snapshot so people can use the latest version if they wish
+        snapshot(MavenPublication) { publication ->
+            groupId project.group
+            artifactId project.archivesBaseName
+            version '0.0.1-SNAPSHOT'
+
+            from components['java']
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
