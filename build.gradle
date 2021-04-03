@@ -10,12 +10,12 @@ targetCompatibility = 11
 
 group = 'de.geolykt.starloader'
 archivesBaseName = 'widener-plugin'
-def baseVersion = '0.0.1'
+def baseVersion = '1.0.0'
 
 repositories {
     maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
+        name 'geolykt'
+        url 'https://geolykt.de/maven'
     }
     mavenCentral()
 }
@@ -23,7 +23,7 @@ repositories {
 dependencies {
     implementation gradleApi()
     // Access widening technologies
-    implementation ('net.fabricmc:access-widener:1.0.0')
+    implementation ('de.geolykt.starloader:access-widener:2.0.0')
     implementation ('org.zeroturnaround:zt-zip:1.14')
 }
 
@@ -31,7 +31,7 @@ gradlePlugin {
     plugins {
         widenerPlugin {
             id = project.archivesBaseName
-            version = '0.0.1'
+            version = '1.0.0'
             implementationClass = 'de.geolykt.starloader.widener.WidenerGradlePlugin'
         }
     }
@@ -52,7 +52,7 @@ publishing {
         plugin(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '0.0.1'
+            version '1.0.0'
 
             from components['java']
 
@@ -64,7 +64,7 @@ publishing {
         snapshot(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '0.0.1-SNAPSHOT'
+            version '1.0.0-SNAPSHOT'
 
             from components['java']
 
